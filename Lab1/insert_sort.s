@@ -5,6 +5,10 @@
 				
 data_to_sort		dcd		34, 23, 22, 8, 50, 74, 2, 1, 17, 40
 list_elements		dcd		10
+				;data_to_sort	dcd		1
+				;list_elements	dcd		1
+				;data_to_sort	dcd		4,2
+				;list_elements	dcd		2
 				
 main				ldr		r3, =data_to_sort   ; Load the starting address of the first
 				;		of element of the array of numbers into r3
@@ -17,9 +21,9 @@ main				ldr		r3, =data_to_sort   ; Load the starting address of the first
 				;		beyond the end of the array.)
 				
 				
-				;#################################################################################
+				;####################################################################################
 				;		Include any setup code here prior to loop that loads data elements in array
-				;#################################################################################
+				;####################################################################################
 				
 				;		r6 pointer = head
 				mov		r6, r5
@@ -51,12 +55,17 @@ main				ldr		r3, =data_to_sort   ; Load the starting address of the first
 				
 				;		Check if there is only one element in the list
 				cmp		r4, #0
-				ble		endloop
+				bgt		loop
+				
+				;		Head and tail = -1
+				mov		r7, #-1
+				str		r7, [r5, #8]
+				b		endloop
 				
 				
-				;#################################################################################
+				;######################################################################################
 				;		Start a loop here to load elements in the array and add them to a linked list
-				;#################################################################################
+				;######################################################################################
 loop				cmp		r4, #1
 				ble		postloop
 				
@@ -119,7 +128,7 @@ endloop
 				;		r13 = array[i]
 				
 				mov		r3, #1
-sortFor		; Outer for loop
+sortFor			; 		Outer for loop
 				cmp		r3, r11
 				bge		endSort
 				
@@ -128,14 +137,13 @@ sortFor		; Outer for loop
 				mov		r7, #0
 				
 sortFindLoop1		cmp		r7, r3
-				ble		endSortFindLoop1
+				bge		endSortFindLoop1
 				;		Load the next pointer into r6
 				ldr		r6, [r6, #8]
 				add		r7, r7, #1
 				b		sortFindLoop1
 				
-endSortFindLoop1
-				;		key = array[j]
+endSortFindLoop1	;		key = array[j]
 				ldr		r10, [r6, #4]
 				
 				;		i = j-1
@@ -148,15 +156,14 @@ sortWhile			mov		r7, #0
 				mov		r6, r5
 				mov		r7, #0
 				
-sortFindLoop2		cmp		r7, r3
+sortFindLoop2		cmp		r7, r4
 				bge		endSortFindLoop2
 				;		Load the next pointer into r6
 				ldr		r6, [r6, #8]
 				add		r7, r7, #1
 				b		sortFindLoop2
 				
-endSortFindLoop2
-				ldr		r13, [r6, #4]
+endSortFindLoop2	ldr		r13, [r6, #4]
 				;		check array[i] > key
 				cmp		r13, r10
 				ble		endSortWhile
@@ -169,11 +176,7 @@ endSortFindLoop2
 				sub		r4, r4, #1
 				b		sortWhile
 				
-endSortWhile		; Perform another swap!!!! :)
-				mov		r1, r3
-				add		r2, r4, #1
-				bl		swap
-				;		j++
+endSortWhile		;		j++
 				add		r3, r3, #1
 				b		sortFor
 				
@@ -195,7 +198,7 @@ endSort			bl		print
 				;#################################################################################
 				;		Add insert, swap, delete functions
 				;#################################################################################
-insert   	 	; Insert function
+insert   	 		; 		Insert function
 				;		parameters:
 				;		r1 - index
 				;		r2 - value
@@ -216,7 +219,7 @@ insLoop			cmp		r7, r1
 				sub		r1, r1, #1
 				b		insLoop
 				
-endInsLoop    ; Load pointer to current next into r9
+endInsLoop    		; 		Load pointer to current next into r9
 				ldr		r9, [r6, #8]
 				
 				;		Set new next to next open memory address
@@ -247,7 +250,7 @@ endInsLoop    ; Load pointer to current next into r9
 				;		Return to caller
 				mov		pc, lr
 				
-insertFirst	; Insert new node 'before' r5, set r5 as memory address
+insertFirst		; 		Insert new node 'before' r5, set r5 as memory address
 				;		new node prev = null
 				mov		r7, #-1
 				str		r7, [r12]
@@ -273,7 +276,7 @@ insertFirst	; Insert new node 'before' r5, set r5 as memory address
 				;		Return to caller
 				mov		pc, lr
 				
-insertLast	; Insert after last element
+insertLast		; 		Insert after last element
 				;		new node next
 				mov		r7, #-1
 				str		r7, [r12, #8]
@@ -302,7 +305,7 @@ insertLast	; Insert after last element
 				
 				
 				
-swap   		 ; Swap function
+swap   		 	; 		Swap function
 				;		parameters:
 				;		r1 - index1
 				;		r2 - index2
@@ -318,7 +321,7 @@ swapLoop1			cmp		r7, r1
 				sub		r1, r1, #1
 				b		swapLoop1
 				
-endSwapLoop1	; Find second index's memory address
+endSwapLoop1		; Find second index's memory address
 				mov		r8, r5
 				mov		r7, #0
 				
@@ -367,7 +370,7 @@ checkContiguous2	ldr		r9, [r8, #8]
 				b		checkPrev1
 				
 				
-normalSwap		; Swap the pointers
+normalSwap		; 		Swap the pointers
 				;		Swap node prevs
 				ldr		r7, [r6]
 				ldr		r9, [r8]
@@ -380,7 +383,7 @@ normalSwap		; Swap the pointers
 				str		r9, [r6, #8]
 				str		r7, [r8, #8]
 				
-checkPrev1	; prev->next = cur
+checkPrev1		; 		prev->next = cur
 				;		First check if null
 				mov		r7, #-1
 				ldr		r9, [r6]
@@ -391,10 +394,10 @@ checkPrev1	; prev->next = cur
 				str		r6, [r9, #8]
 				b		checkPrev2
 				
-newHead1			; Set the head to be the new thing idk man
+newHead1			;		Set the head to be the new thing idk man
 				mov		r5, r6
 				
-checkPrev2	; prev->next = cur
+checkPrev2		; 		prev->next = cur
 				;		First check if null
 				mov		r7, #-1
 				ldr		r9, [r8]
@@ -405,11 +408,11 @@ checkPrev2	; prev->next = cur
 				str		r8, [r9, #8]
 				b		checkNext1
 				
-newHead2			; Set the head to be the new thing idk man
+newHead2			; 		Set the head to be the new thing idk man
 				mov		r5, r8
 				
 				
-checkNext1	; next->prev = cur
+checkNext1		; 		next->prev = cur
 				;		First check if null
 				mov		r7, #-1
 				ldr		r9, [r6, #8]
@@ -420,7 +423,7 @@ checkNext1	; next->prev = cur
 				str		r6, [r9]
 				
 				
-checkNext2	; next->prev = cur
+checkNext2		; 		next->prev = cur
 				;		First check if null
 				mov		r7, #-1
 				ldr		r9, [r8, #8]
@@ -450,7 +453,7 @@ endSwap			mov		pc, lr
 				
 				
 				
-delete   	 ; Delete function
+delete   	 		; 		Delete function
 				;		parameters:
 				;		r1 - index
 				
@@ -470,7 +473,7 @@ delLoop			cmp		r7, r1
 				sub		r1, r1, #1
 				b		delLoop
 				
-endDelLoop    ;		Check if deleting the last element
+endDelLoop    		;		Check if deleting the last element
 				cmp		r10, r11
 				beq		delLast
 				
@@ -490,7 +493,7 @@ endDelLoop    ;		Check if deleting the last element
 				;		Return to caller
 				mov		pc, lr
 				
-delFirst		; Delete the first element
+delFirst			; 		Delete the first element
 				;		Just set next element's previous to -1
 				ldr		r6, [r6, #8]
 				mov		r7, #-1
@@ -505,7 +508,7 @@ delFirst		; Delete the first element
 				;		Return to caller
 				mov		pc, lr
 				
-delLast		; Delete the last element
+delLast			; 		Delete the last element
 				;		Just set the previous element's next to -1
 				ldr		r6, [r6]
 				mov		r7, #-1
@@ -518,7 +521,7 @@ delLast		; Delete the last element
 				mov		pc, lr
 				
 				
-print		; Function to print the list
+print			; 		Function to print the list
 				mov		r6, r5
 				ldr		r0, [r6, #4] ; First element in list
 				ldr		r6, [r6, #8] ; Check if next is null
