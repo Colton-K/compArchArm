@@ -1,0 +1,23 @@
+all: matrix_multiply_unrolled_step4 matrix_multiply_unrolled matrix_multiply matrix_multiply_unrolled_step3 matrix_multiply_ri matrix_multiply_unrolled_step5 
+
+matrix_multiply_unrolled_step4:
+	gcc matrix_multiply_unrolled_step4.c -o matrix_multiply_unrolled_step4
+
+matrix_multiply_unrolled:
+	gcc matrix_multiply_unrolled.c -o matrix_multiply_unrolled
+
+matrix_multiply:
+	gcc matrix_multiply.c -o matrix_multiply
+
+matrix_multiply_unrolled_step3:
+	gcc matrix_multiply_unrolled_step3.c -o matrix_multiply_unrolled_step3
+
+matrix_multiply_ri:
+	gcc matrix_multiply_ri.c -o matrix_multiply_ri
+
+matrix_multiply_unrolled_step5:
+	gcc matrix_multiply_unrolled_step5.c -o matrix_multiply_unrolled_step5
+
+clean:
+	 rm matrix_multiply_unrolled_step4 matrix_multiply_unrolled matrix_multiply matrix_multiply_unrolled_step3 matrix_multiply_ri matrix_multiply_unrolled_step5 
+

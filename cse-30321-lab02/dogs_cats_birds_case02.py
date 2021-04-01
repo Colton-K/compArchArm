@@ -24,7 +24,7 @@ train_data_dir = 'Datasets/data/train'
 validation_data_dir = 'Datasets/data/validation'
 nb_train_samples = 5000
 nb_validation_samples = 1000
-epochs = 30
+epochs = 100
 batch_size = 100
 
 ###################################################################################################
@@ -135,14 +135,14 @@ history = model.fit(
 
 import pandas as pd
 hist_df = pd.DataFrame(history.history) 
-hist_csv_file = 'dogs_cats_birds_model_case02_30epoch.csv'
+hist_csv_file = 'dogs_cats_birds_model_case02_100epoch.csv'
 with open(hist_csv_file, mode='w') as f:
     hist_df.to_csv(f)
 
 ###################################################################################################
 # Here, we save the model weights and generate an image of the network...
 ###################################################################################################
-model.save('dogs_cats_birds_model_case02_30epoch')
+model.save('dogs_cats_birds_model_case02_100epoch')
 
 plot_model(model, to_file='dogs_cats_birds_model_case02.png', show_shapes=True, show_layer_names=True)
 

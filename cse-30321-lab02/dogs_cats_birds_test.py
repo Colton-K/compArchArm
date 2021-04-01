@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 # sanity check for the tf version
 print(tf.__version__)
 
-model_path = 'dogs_cats_birds_model_case03_30epoch'
+#  model_path = 'dogs_cats_birds_model_case03_30epoch'
+model_path = 'dogs_cats_birds_model_case03_100epoch'
 #  model_path = 'dogs_cats_birds_model_case02_30epoch'
 model=load_model(model_path)
 #model.summary()
@@ -29,7 +30,7 @@ else:
 #  test_image_path = 'dogTest4.jpg'
 #  test_image_path = 'catTest.jpeg'
 #  test_image_path = 'birdTest.jpg'
-test_image_path = 'lionTest.jpg'
+#  test_image_path = 'lionTest.jpg'
 
 
 def test_image(filename):
