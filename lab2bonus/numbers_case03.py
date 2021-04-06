@@ -14,14 +14,14 @@ print(tf.__version__)
 ###################################################################################################
 # Define image size for network model -- all input images are scaled to this size.
 ###################################################################################################   
-img_width, img_height = 35, 35
+img_width, img_height = 150,150
 
 ###################################################################################################
 # Include pointers to training and validation data folders -- be sure to examine subfolder structure
 # --> I also define the # of training samples, validation samples, epochs, and batch size here.
 ###################################################################################################   
 train_data_dir = 'numbers/UNCATEGORIZED'
-validation_data_dir = 'numbers/0001_CH4M'
+validation_data_dir = 'numbers/UNCATEGORIZED'
 nb_train_samples = 5000
 nb_validation_samples = 1000
 epochs = 100
@@ -74,7 +74,7 @@ model.add(Dense(512))
 model.add(Activation('relu'))
 model.add(Dense(256))
 model.add(Activation('relu'))
-model.add(Dense(3))
+model.add(Dense(10))
 model.add(Activation('softmax'))
 
 model.summary()
@@ -95,11 +95,6 @@ train_datagen = ImageDataGenerator(
     zoom_range=0.2,
     horizontal_flip=True,
     validation_split=0.2)
-
-###################################################################################################
-# This is the augmentation configuration we will use for testing:  only rescaling
-###################################################################################################
-test_datagen = ImageDataGenerator(rescale=1. / 255) 
 
 ###################################################################################################
 # Subsequent invocations of flow_from_directory() will use the paths to the training and validation 
@@ -150,6 +145,3 @@ with open(hist_csv_file, mode='w') as f:
 model.save('numbers_case03_100epoch')
 
 plot_model(model, to_file='numbers_case03_100epoch.png', show_shapes=True, show_layer_names=True)
-
-
-
