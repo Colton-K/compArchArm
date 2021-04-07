@@ -135,7 +135,7 @@ history = model.fit(
 
 import pandas as pd
 hist_df = pd.DataFrame(history.history) 
-hist_csv_file = 'dogs_cats_birds_model_case03_100epoch.csv'
+hist_csv_file = 'numbers_case03_100epoch.csv'
 with open(hist_csv_file, mode='w') as f:
     hist_df.to_csv(f)
 
