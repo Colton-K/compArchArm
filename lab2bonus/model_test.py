@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # sanity check for the tf version
 print(tf.__version__)
 
-model_path = 'numbers_case03_100epoch'
+model_path = 'numbers_25epoch'
 model=load_model(model_path)
 #model.summary()
 
