@@ -18,6 +18,7 @@ int main(void) {
   for(i=0; i<XSIZE; i++) {
     for(j=0; j<YSIZE; j++) {
       x[i][j] = 0;
+      printf("Initializing X[%u][%u]: %p \n", i, j, &x[i][j]);
     }
   }
 
@@ -45,4 +46,7 @@ int main(void) {
       x[i][j] = r;
     }
   }
+
+  printf("X Head: %p, Y Head: %p, Z Head %p \n", x, y, z);
+  printf("X[0] %p, X[1] %p, X[2] %p \n", x[0], x[1], x[2]);
 }

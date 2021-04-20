@@ -4,8 +4,6 @@
 #define XSIZE 200
 #define YSIZE 200
 
-#define BLOCKSIZE 73
-
 #define CACHE_SIZE 65536
 #define BLOCK_SIZE 8 // # of 32 bit long words
 #define NUM_BLOCKS CACHE_SIZE/(BLOCK_SIZE * 4) // 32 bits = 4 bytes
@@ -47,38 +45,6 @@ void cache(void * addr) {
     }
 }
 
-void printMatrix(int m[XSIZE][YSIZE]) {
-    int i, j;
-    for (i = 0; i < XSIZE; i++) {
-        for (j = 0; j < YSIZE; j++) {
-            printf("%u\t", m[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void computeBlock(int n, int ii, int jj, int kk, int x[XSIZE][YSIZE], int y[XSIZE][YSIZE], int z[XSIZE][YSIZE]) {
-    int i, j, k, q;
-    
-    for (i = ii; i < ii+BLOCKSIZE; i++) {
-        for (j = jj; j < jj+BLOCKSIZE; j++) {
-            if ((kk+BLOCKSIZE) < XSIZE) {
-                q = kk + BLOCKSIZE;
-            }
-            else {
-                q = XSIZE;
-            }
-            int r = x[i][j];
-            for (k = kk; k < q; k++) {
-                r = r + y[i][k] * z[k][j];
-                cache(&y[i][k]);
-                cache(&z[k][j]);
-            }
-            x[i][j] = r;
-            cache(&x[i][j]);
-        }
-    }
-}
 
 int main(void) {
 
@@ -90,10 +56,19 @@ int main(void) {
   
   int r;
 
+  /* Initialize validBit and tag matrix */
+  for(i=0; i<NUM_BLOCKS; i++) {
+    validBit[i] = 0;
+    tag[i] = 0;
+  }
+
+
+
   /* Initialize x matrix */
   for(i=0; i<XSIZE; i++) {
     for(j=0; j<YSIZE; j++) {
       x[i][j] = 0;
+      /* printf("Initializing X[%u][%u]: %p \n", i, j, &x[i][j]); */
     }
   }
 
@@ -107,31 +82,26 @@ int main(void) {
   /* Initialize z matrix */
   for(i=0; i<XSIZE; i++) {
     for(j=0; j<YSIZE; j++) {
-	z[i][j] = i + j;
+    z[i][j] = i + j;
     }
   }
 
-  /* Do matrix multiply */
-  /* for(i=0; i<XSIZE; i=i+BLOCKSIZE) { */
-  /*   for(j=0; j<YSIZE; j=j+BLOCKSIZE) { */
-  /*     r = 0; */
-  /*     for(k=0; k<XSIZE; k=k+BLOCKSIZE) { */
-  /*       r = r + y[i][k] * z[k][j]; */
-  /*     } */
-  /*     x[i][j] = r; */
-  /*   } */
-  /* } */
 
   /* Do matrix multiply */
-  for(i=0; i<XSIZE; i=i+BLOCKSIZE) {
-    for(j=0; j<YSIZE; j=j+BLOCKSIZE) {
-      for(k=0; k<XSIZE; k=k+BLOCKSIZE) {
-        computeBlock(BLOCKSIZE, i, j, k, x, y, z);
+  for(i=0; i<XSIZE; i=i+1) {
+    for(j=0; j<YSIZE; j=j+1) {
+      r = 0;
+      for(k=0; k<XSIZE; k=k+1) {
+        r = r + y[i][k] * z[k][j];
+        cache(&y[i][k]);
+        cache(&z[k][j]);
       }
+      x[i][j] = r;
+      cache(&x[i][j]);
     }
   }
-
-  /* printMatrix(x); */
-
+    
   printf("Hits: %u, Misses: %u, Miss rate: %f\n", hits, misses, (float)misses/(hits+misses));
+  /* printf("X Head: %p, Y Head: %p, Z Head %p \n", x, y, z); */
+  /* printf("X[0] %p, X[1] %p, X[2] %p \n", x[0], x[1], x[2]); */
 }

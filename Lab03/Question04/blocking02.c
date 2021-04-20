@@ -4,14 +4,14 @@
 #define XSIZE 200
 #define YSIZE 200
 
-#define BLOCKSIZE 73
+#define BLOCKSIZE 104
 
-#define CACHE_SIZE 65536
-#define BLOCK_SIZE 8 // # of 32 bit long words
+#define CACHE_SIZE 131072
+#define BLOCK_SIZE 16 // # of 32 bit long words
 #define NUM_BLOCKS CACHE_SIZE/(BLOCK_SIZE * 4) // 32 bits = 4 bytes
-#define INDEX_MASK 0xFFE0 // = log2(NUM_BLOCKS) bits
-#define OFFSET_MASK 0x1F
-#define TAG_MASK 0xFFFFFFFFFFFF0000
+#define INDEX_MASK 0x1FFC0 // = log2(NUM_BLOCKS) bits
+#define OFFSET_MASK 0x3F
+#define TAG_MASK 0xFFFFFFFFFFFE0000
 
 
 /* printf("CACHE SIZE %u, BLOCK_SIZE %u, NUM_BLOCKS %u, INDEX_MASK %x \n", CACHE_SIZE, BLOCK_SIZE, NUM_BLOCKS, INDEX_MASK); */
@@ -24,10 +24,10 @@ int tag[NUM_BLOCKS];
 
 void cache(void * addr) {
     /* printf("%p \n", addr); */
-    int index = ((unsigned long)addr & (unsigned long)INDEX_MASK) >> 5;
+    int index = ((unsigned long)addr & (unsigned long)INDEX_MASK) >> 6;
     // also shift?
 
-    int currTag = ((unsigned long)addr & TAG_MASK) >> 16;
+    int currTag = ((unsigned long)addr & TAG_MASK) >> 17;
     /* printf("addr: %p, Index: %u, currTag: %u, NUM_BLOCKS %u \n", addr, index, currTag, NUM_BLOCKS); */
 
     if (validBit[index]) {

@@ -1,0 +1,9 @@
+all: blocking 
+
+blocking:
+	gcc blocking.c -o blocking
+	./blocking
+
+clean:
+	 rm blocking 
+
