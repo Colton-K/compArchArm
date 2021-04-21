@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <math.h>
 
-#define XSIZE 200
-#define YSIZE 200
+#define XSIZE 400
+#define YSIZE 400
 
-#define BLOCKSIZE 73
+#define BLOCKSIZE 26
+/* #define BLOCKSIZE 104 */
 
 #define CACHE_SIZE 65536
 #define BLOCK_SIZE 8 // # of 32 bit long words

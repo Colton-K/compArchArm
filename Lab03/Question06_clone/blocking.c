@@ -4,7 +4,7 @@
 
 #define SIZE 200
 
-int B = 30;
+int B = 100;
 
 int main(void) {
 

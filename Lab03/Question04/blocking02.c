@@ -4,6 +4,7 @@
 #define XSIZE 200
 #define YSIZE 200
 
+/* #define BLOCKSIZE 36 */
 #define BLOCKSIZE 104
 
 #define CACHE_SIZE 131072
@@ -69,6 +70,8 @@ void computeBlock(int n, int ii, int jj, int kk, int x[XSIZE][YSIZE], int y[XSIZ
                 q = XSIZE;
             }
             int r = x[i][j];
+            /* int r = 0; */
+            /* printf("i: %d, j: %d, r: %d \n", i, j, r); */
             for (k = kk; k < q; k++) {
                 r = r + y[i][k] * z[k][j];
                 cache(&y[i][k]);
